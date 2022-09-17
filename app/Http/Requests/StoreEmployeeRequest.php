@@ -13,7 +13,6 @@ class StoreEmployeeRequest extends FormRequest
     }
 
 
-
     public function rules()
     {
         return [
