@@ -21,9 +21,9 @@ class EmployeesImport implements ToModel, WithUpserts, WithChunkReading, WithBat
     public function model(array $row)
     {
         return new Employee([
-            'full_name' => $row[0] ?? null,
-            'fin_code' => Str::upper($row[1]) ?? null,
-            'email' => $row[2] ?? null,
+            'full_name' => $row['full_name'] ?? null,
+            'fin_code' => Str::upper($row['fin_code']) ?? null,
+            'email' => $row['email'] ?? null,
         ]);
     }
 
@@ -46,9 +46,9 @@ class EmployeesImport implements ToModel, WithUpserts, WithChunkReading, WithBat
     public function rules(): array
     {
         return [
-            '1' => 'required',
-            '2' => 'required|email|unique:employees',
-            '3' => 'required|min:7|max:7'
+            'full_name' => 'required',
+            'email' => 'required|email|unique:employees',
+            'fin_code' => 'required|min:7|max:7'
         ];
     }
 
