@@ -6,7 +6,6 @@ use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Imports\EmployeesImport;
 use App\Models\Employee;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Maatwebsite\Excel\Facades\Excel;
@@ -69,7 +68,7 @@ class EmployeeController extends Controller
         if ($request->file('employee_excel')->extension() !== 'xlsx')
             return response()->json(['message' => 'Fayl formatı xlsx olmalıdır... '], Response::HTTP_FAILED_DEPENDENCY);
 
-        Excel::queueImport(new EmployeesImport(), $request->file('employee_excel'));
+        Excel::queueImport(new EmployeesImport, $request->file('employee_excel'));
 
         return $this->successResponse(trans('responses.ok'));
     }
