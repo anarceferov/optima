@@ -14,7 +14,6 @@ use Maatwebsite\Excel\Concerns\WithUpserts;
 use Maatwebsite\Excel\Events\ImportFailed;
 
 
-
 class EmployeesImport implements ToModel, WithUpserts, WithChunkReading, WithBatchInserts, ShouldQueue
 {
 

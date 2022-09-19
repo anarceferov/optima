@@ -9,22 +9,22 @@ class ImportEmployeeRequest extends FormRequest
 
     public function authorize()
     {
-        return true;
+        return false;
     }
 
 
-    public function rules()
-    {
-        return [
-            'excel' => 'mimes:application/a2l'
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-
-        ];
-    }
+//    public function rules()
+//    {
+//        return [
+//            'employee_excel' => 'mimes:application/a2l'
+//        ];
+//    }
+//
+//    public function messages()
+//    {
+//        return [
+//            'employee_excel.mimes'=>'Fayl xlsx formatinda olmalidir'
+//        ];
+//    }
 
 }
