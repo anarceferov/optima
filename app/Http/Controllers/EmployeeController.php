@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ImportEmployeeRequest;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Imports\EmployeesImport;
 use App\Models\Employee;
 use App\Traits\ApiResponder;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
@@ -68,5 +71,14 @@ class EmployeeController extends Controller
         return $this->successResponse(trans("responses.ok"));
     }
 
+
+
+    public function import(ImportEmployeeRequest $request)
+    {
+
+        Excel::queueImport(new EmployeesImport, $request->file('employee_excel'));
+
+        return $this->successResponse(trans('responses.ok'));
+    }
 
 }
