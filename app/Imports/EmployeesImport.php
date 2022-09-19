@@ -6,16 +6,20 @@ use App\Models\Employee;
 use App\Notifications\ImportHasFailedNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithBatchInserts;
 use Maatwebsite\Excel\Concerns\WithChunkReading;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithUpserts;
+use Maatwebsite\Excel\Concerns\WithValidation;
 use Maatwebsite\Excel\Events\ImportFailed;
 
 
-class EmployeesImport implements ToModel, WithUpserts, WithChunkReading, WithBatchInserts, ShouldQueue
+class EmployeesImport implements ToModel, WithUpserts, WithChunkReading, WithBatchInserts, ShouldQueue , WithValidation
 {
+
+    use Importable;
 
 //    public function __construct(Employee $importedBy)
 //    {
@@ -30,6 +34,18 @@ class EmployeesImport implements ToModel, WithUpserts, WithChunkReading, WithBat
 //            },
 //        ];
 //    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public function model(array $row)
     {
@@ -55,4 +71,19 @@ class EmployeesImport implements ToModel, WithUpserts, WithChunkReading, WithBat
         return 'email';
     }
 
+
+    public function rules(): array
+    {
+        return [
+            'email' => ['email' , 'unique:employees' , 'max:3']
+        ];
+    }
+
+
+//    public function customValidationMessages()
+//    {
+//        return [
+//            'email' => 'Custom message for :attribute.',
+//        ];
+//    }
 }

@@ -10,6 +10,8 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
+
+
 class NotifyEmployeeOfCompletedImport implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -26,6 +28,6 @@ class NotifyEmployeeOfCompletedImport implements ShouldQueue
 
     public function handle()
     {
-        $this->user->notify(new ImportReady());
+        $this->employee->notify(new ImportReady);
     }
 }

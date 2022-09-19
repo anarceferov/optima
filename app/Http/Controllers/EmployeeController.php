@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ImportEmployeeRequest;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
 use App\Imports\EmployeesImport;
 use App\Models\Employee;
-use App\Traits\ApiResponder;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Maatwebsite\Excel\Facades\Excel;
@@ -15,19 +14,15 @@ use Maatwebsite\Excel\Facades\Excel;
 class EmployeeController extends Controller
 {
 
-    use ApiResponder;
-
     public function index()
     {
         $employees = Employee::get();
-
         return $this->dataResponse($employees);
     }
 
 
     public function store(StoreEmployeeRequest $request)
     {
-
         $employee = new Employee();
         $employee->fill($request->only([
             'full_name',
@@ -40,18 +35,14 @@ class EmployeeController extends Controller
     }
 
 
-    public function show($id)
+    public function show(Employee $employee)
     {
-
-        $employee = Employee::findOrFail($id);
-
         return $this->dataResponse($employee);
     }
 
 
     public function update(UpdateEmployeeRequest $request, $id)
     {
-
         $employee = Employee::findOrFail($id);
 
         $employee->fill($request->only([
@@ -65,9 +56,9 @@ class EmployeeController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy(Employee $employee)
     {
-        Employee::findOrFail($id)->delete();
+        $employee->delete();
 
         return $this->successResponse(trans("responses.ok"));
     }
@@ -75,13 +66,13 @@ class EmployeeController extends Controller
 
     public function import(Request $request)
     {
-
         if ($request->file('employee_excel')->extension() !== 'xlsx')
             return response()->json(['message' => 'Fayl formatı xlsx olmalıdır... '], Response::HTTP_FAILED_DEPENDENCY);
 
-        Excel::queueImport(new EmployeesImport, $request->file('employee_excel'));
+        Excel::queueImport(new EmployeesImport(), $request->file('employee_excel'));
 
         return $this->successResponse(trans('responses.ok'));
     }
+
 
 }
