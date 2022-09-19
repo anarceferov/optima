@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
+use App\Http\Resources\EmployeeResource;
 use App\Imports\EmployeesImport;
 use App\Models\Employee;
 use Illuminate\Http\Request;
@@ -15,7 +16,8 @@ class EmployeeController extends Controller
 
     public function index()
     {
-        $employees = Employee::get();
+        $employees =  EmployeeResource::collection(Employee::all());
+
         return $this->dataResponse($employees);
     }
 
@@ -36,7 +38,7 @@ class EmployeeController extends Controller
 
     public function show(Employee $employee)
     {
-        return $this->dataResponse($employee);
+        return $this->dataResponse(new EmployeeResource($employee));
     }
 
 
@@ -67,6 +69,7 @@ class EmployeeController extends Controller
     {
         if ($request->file('employee_excel')->extension() !== 'xlsx')
             return response()->json(['message' => 'Fayl formatı xlsx olmalıdır... '], Response::HTTP_FAILED_DEPENDENCY);
+
 
         Excel::queueImport(new EmployeesImport, $request->file('employee_excel'));
 
